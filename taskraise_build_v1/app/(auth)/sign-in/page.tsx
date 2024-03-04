@@ -16,32 +16,23 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
-
-const formSchema = z.object({
-  password: z.string(),
-  email: z.string(),
-});
+import { signInSchema } from "@/utils/functions/auth/authSchema";
+import { signin } from "@/utils/functions/auth/authActions";
 
 export default function SignIn() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      password: "",
-      email: "",
-    },
+  const form = useForm<z.infer<typeof signInSchema>>({
+    resolver: zodResolver(signInSchema),
   });
-
-  const onSubmit = async function (values: z.infer<typeof formSchema>) {};
 
   return (
     <div className="w-1/2">
       <section>
         <div className="space-y-1 mb-6">
-          <p className="text-md text-muted-foreground">Welcome Back!👋</p>
+          <p className="text-md text-muted-foreground">
+            <span className="text-2xl">👋</span> Welcome Back!
+          </p>
           <h1 className="text-3xl font-heading">Sign in to your account</h1>
           <p className="text-sm text-muted-foreground">
             Don't have an account?{" "}
@@ -52,7 +43,7 @@ export default function SignIn() {
         </div>
       </section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+        <form onSubmit={form.handleSubmit(signin)} className="space-y-3">
           <FormField
             control={form.control}
             name="email"

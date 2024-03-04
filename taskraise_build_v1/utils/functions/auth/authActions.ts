@@ -2,17 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-
 import { createClient } from "@/utils/supabase/server";
+import { signInSchema, signUpSchema } from "./authSchema";
+import { z } from "zod";
 
-export async function login(formData: FormData) {
+export async function signin(values: z.infer<typeof signInSchema>) {
   const supabase = createClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email: values.email,
+    password: values.password,
   };
 
   const { error } = await supabase.auth.signInWithPassword(data);
@@ -25,14 +26,19 @@ export async function login(formData: FormData) {
   redirect("/");
 }
 
-export async function signup(formData: FormData) {
+export async function signup(values: z.infer<typeof signUpSchema>) {
   const supabase = createClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
-    email: formData.get("email") as string,
-    password: formData.get("password") as string,
+    email: values.email,
+    password: values.password,
+    options: {
+      data: {
+        username: values.username,
+      },
+    },
   };
 
   const { error } = await supabase.auth.signUp(data);

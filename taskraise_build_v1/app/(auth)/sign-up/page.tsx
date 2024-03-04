@@ -17,31 +17,23 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-
-const formSchema = z.object({
-  password: z.string(),
-  email: z.string(),
-});
+import { signup } from "@/utils/functions/auth/authActions";
+import { signUpSchema } from "@/utils/functions/auth/authSchema";
 
 export default function SignUp() {
-  const router = useRouter();
   const [error, setError] = useState("");
   const [showError, setShowError] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      password: "",
-      email: "",
-    },
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
   });
-
-  const onSubmit = async function (values: z.infer<typeof formSchema>) {};
 
   return (
     <div className="w-1/2">
       <section>
         <div className="space-y-1 mb-6">
-          <p className="text-md text-muted-foreground">Welcome!👋</p>
+          <p className="text-md text-muted-foreground">
+            <span className="text-2xl ">👋</span> Welcome!
+          </p>
           <h1 className="text-3xl font-heading">Create your account</h1>
           <p className="text-sm text-muted-foreground">
             Have an account?{" "}
@@ -52,7 +44,7 @@ export default function SignUp() {
         </div>
       </section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+        <form onSubmit={form.handleSubmit(signup)} className="space-y-3">
           <FormField
             control={form.control}
             name="email"
