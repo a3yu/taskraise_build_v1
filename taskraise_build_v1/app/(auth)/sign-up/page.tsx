@@ -25,8 +25,15 @@ export default function SignUp() {
   const [showError, setShowError] = useState(false);
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+    },
   });
-
+  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
+    await signup(data);
+  };
   return (
     <div className="w-1/2">
       <section>
@@ -44,7 +51,20 @@ export default function SignUp() {
         </div>
       </section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(signup)} className="space-y-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="Username" {...field} autoComplete="off" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="email"
@@ -52,7 +72,12 @@ export default function SignUp() {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input placeholder="Email" {...field} />
+                  <Input
+                    placeholder="Email"
+                    {...field}
+                    type="email"
+                    autoComplete="email"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -83,7 +108,9 @@ export default function SignUp() {
 
           <section className="w-full flex justify-center items-center">
             <div className="flex">
-              <Button variant={"outline"}>Sign up using Google</Button>
+              <Button variant={"outline"} type="submit">
+                Sign up using Google
+              </Button>
             </div>
           </section>
         </form>{" "}

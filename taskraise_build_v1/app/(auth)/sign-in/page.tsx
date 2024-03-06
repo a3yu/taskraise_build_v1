@@ -24,7 +24,15 @@ export default function SignIn() {
   const [showError, setShowError] = useState(false);
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
+
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+    await signin(data);
+  };
 
   return (
     <div className="w-1/2">

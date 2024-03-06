@@ -9,8 +9,6 @@ import { z } from "zod";
 export async function signin(values: z.infer<typeof signInSchema>) {
   const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
   const data = {
     email: values.email,
     password: values.password,
@@ -28,9 +26,7 @@ export async function signin(values: z.infer<typeof signInSchema>) {
 
 export async function signup(values: z.infer<typeof signUpSchema>) {
   const supabase = createClient();
-
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
+  console.log(values);
   const data = {
     email: values.email,
     password: values.password,
@@ -44,6 +40,7 @@ export async function signup(values: z.infer<typeof signUpSchema>) {
   const { error } = await supabase.auth.signUp(data);
 
   if (error) {
+    console.log(error);
     redirect("/error");
   }
 
