@@ -9,6 +9,58 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      activities: {
+        Row: {
+          action: string | null
+          created_at: string
+          customer: string
+          id: number
+          orderId: number
+          organization: number
+          total: number
+        }
+        Insert: {
+          action?: string | null
+          created_at?: string
+          customer: string
+          id?: number
+          orderId: number
+          organization: number
+          total: number
+        }
+        Update: {
+          action?: string | null
+          created_at?: string
+          customer?: string
+          id?: number
+          orderId?: number
+          organization?: number
+          total?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_activities_customer_fkey"
+            columns: ["customer"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_activities_orderId_fkey"
+            columns: ["orderId"]
+            isOneToOne: false
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_activities_organization_fkey"
+            columns: ["organization"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       campaigns: {
         Row: {
           created_at: string
@@ -40,6 +92,44 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "public_campaigns_organization_fkey"
+            columns: ["organization"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      invitations: {
+        Row: {
+          accepted: boolean | null
+          created_at: string
+          email: string | null
+          expires_at: string | null
+          id: number
+          organization: number | null
+          token: string | null
+        }
+        Insert: {
+          accepted?: boolean | null
+          created_at?: string
+          email?: string | null
+          expires_at?: string | null
+          id?: number
+          organization?: number | null
+          token?: string | null
+        }
+        Update: {
+          accepted?: boolean | null
+          created_at?: string
+          email?: string | null
+          expires_at?: string | null
+          id?: number
+          organization?: number | null
+          token?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_invitation_organization_fkey"
             columns: ["organization"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -159,30 +249,49 @@ export type Database = {
       }
       service_orders: {
         Row: {
+          completed_at: string | null
           created_at: string
+          customer: string
+          details: string | null
           id: number
           organization: number
           price: number
+          quantity: number | null
           service: number
           status: Database["public"]["Enums"]["service_order_status"]
         }
         Insert: {
+          completed_at?: string | null
           created_at?: string
+          customer: string
+          details?: string | null
           id?: number
           organization: number
           price: number
+          quantity?: number | null
           service: number
           status?: Database["public"]["Enums"]["service_order_status"]
         }
         Update: {
+          completed_at?: string | null
           created_at?: string
+          customer?: string
+          details?: string | null
           id?: number
           organization?: number
           price?: number
+          quantity?: number | null
           service?: number
           status?: Database["public"]["Enums"]["service_order_status"]
         }
         Relationships: [
+          {
+            foreignKeyName: "public_service_orders_customer_fkey"
+            columns: ["customer"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_service_orders_organization_fkey"
             columns: ["organization"]
@@ -218,14 +327,17 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          title: string
         }
         Insert: {
           created_at?: string
           id?: number
+          title?: string
         }
         Update: {
           created_at?: string
           id?: number
+          title?: string
         }
         Relationships: []
       }

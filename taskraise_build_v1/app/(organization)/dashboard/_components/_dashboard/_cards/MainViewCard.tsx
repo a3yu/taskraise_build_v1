@@ -4,16 +4,22 @@ import MainView from "../_view/MainView";
 import { states } from "../Dashboard";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Tables } from "@/types/supabase";
-import { ServiceOrderWithService } from "../../types";
+import { OrganizationData, ServiceOrderWithService } from "../../types";
 
 export default function MainViewCard({
+  organizationData,
+  setOrganizationData,
   state,
   setState,
   orderData,
+  setOrderData,
 }: {
+  organizationData: OrganizationData;
+  setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
   state: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
   orderData: ServiceOrderWithService[];
+  setOrderData: React.Dispatch<React.SetStateAction<ServiceOrderWithService[]>>;
 }) {
   // Convert the state to an index for easier manipulation
   const stateIndex = states.indexOf(state);
@@ -35,7 +41,13 @@ export default function MainViewCard({
   return (
     <>
       <Card>
-        <MainView state={state} orderData={orderData} />
+        <MainView
+          organizationData={organizationData}
+          setOrganizationData={setOrganizationData}
+          state={state}
+          orderData={orderData}
+          setOrderData={setOrderData}
+        />
       </Card>
     </>
   );

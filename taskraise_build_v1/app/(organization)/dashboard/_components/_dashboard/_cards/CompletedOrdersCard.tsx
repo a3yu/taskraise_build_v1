@@ -22,7 +22,7 @@ export default function CompletedOrdersCard({
     <>
       <Card
         className={`w-full cursor-pointer hover:scale-105 transition duration-150 ease-in-out ${
-          state === states[3] ? "border-b-4 border-b-primary" : ""
+          state === states[3] ? "border-[3px] border-primary" : ""
         } transition-border duration-300 ease-in-out`}
         onClick={() => setState(states[3])}
       >

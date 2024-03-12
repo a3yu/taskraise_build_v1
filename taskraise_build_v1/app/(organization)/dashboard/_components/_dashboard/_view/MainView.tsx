@@ -1,34 +1,41 @@
 import React from "react";
 import { states } from "../Dashboard";
 import OverviewView from "./OverviewView";
-import IncomingView from "./IncomingView";
-import OngoingView from "./OngoingView";
-import CompletedView from "./CompletedView";
 import { motion } from "framer-motion";
 import { Tables } from "@/types/supabase";
-import { ServiceOrderWithService } from "../../types";
+import { OrganizationData, ServiceOrderWithService } from "../../types";
+import OrderView from "./OrderView";
+import ServiceView from "./ServiceView";
 
 function MainView({
+  organizationData,
+  setOrganizationData,
   state,
   orderData,
+  setOrderData,
 }: {
+  organizationData: OrganizationData;
+  setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
   state: string;
   orderData: ServiceOrderWithService[];
+  setOrderData: React.Dispatch<React.SetStateAction<ServiceOrderWithService[]>>;
 }) {
   let Component = null;
 
   switch (state) {
     case states[0]:
-      Component = <OverviewView />;
+      Component = (
+        <OverviewView
+          organizationData={organizationData}
+          setOrganizationData={setOrganizationData}
+        />
+      );
       break;
     case states[1]:
-      Component = <IncomingView data={orderData} />;
+      Component = <OrderView data={orderData} setData={setOrderData} />;
       break;
     case states[2]:
-      Component = <OngoingView />;
-      break;
-    case states[3]:
-      Component = <CompletedView />;
+      Component = <ServiceView />;
       break;
     default:
       break;

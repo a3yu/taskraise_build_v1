@@ -10,8 +10,10 @@ export async function getOrganizationAll(id: number) {
     .select(
       `
   *,
-  service_orders (*, services(*)),
-  campaigns (*)
+  service_orders (*, services(*), profiles(*)),
+  campaigns (*),
+  activities (*, profiles(*)),
+  organization_members (*, profiles(*))
 `
     )
     .eq("id", id)

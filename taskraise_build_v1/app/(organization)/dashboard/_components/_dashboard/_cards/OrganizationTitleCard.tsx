@@ -2,35 +2,18 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import React from "react";
 import { Progress } from "@/components/ui/progress";
-import {
-  ArrowRightCircle,
-  Diamond,
-  GaugeCircle,
-  LocateIcon,
-  MapPin,
-  Pencil,
-} from "lucide-react";
+import { MapPin, PenLine } from "lucide-react";
 import { states } from "../Dashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 
-export default function OrganizationTitleCard({
-  state,
-  setState,
-}: {
-  state: string;
-  setState: React.Dispatch<React.SetStateAction<string>>;
-}) {
+export default function OrganizationTitleCard() {
   return (
     <>
-      <Card
-        className={`w-full cursor-pointer hover:scale-105 transition duration-150 ease-in-out ${
-          state === states[0] ? "border-b-4 border-b-primary" : ""
-        } transition-border duration-300 ease-in-out`}
-        onClick={() => setState(states[0])}
-      >
+      <Card className="border-none">
         <CardHeader>
-          <div className="flex">
-            <Avatar className="mr-4 h-14 w-14">
+          <div className="flex ">
+            <Avatar className="mr-4 h-16 w-16">
               <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -45,6 +28,9 @@ export default function OrganizationTitleCard({
                 <p className="text-xs">Ithaca, NY, USA</p>
               </div>
             </div>
+            <Button size={"icon"} variant={"outline"} className="ml-auto ">
+              <PenLine className="h-4 w-4" />
+            </Button>
           </div>
         </CardHeader>
       </Card>

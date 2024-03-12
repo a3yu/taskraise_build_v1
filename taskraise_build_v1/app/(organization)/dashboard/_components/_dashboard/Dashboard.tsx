@@ -4,53 +4,63 @@ import TotalFundsRaisedCard from "./_cards/TotalFundsRaisedCard";
 import CampaignCard from "./_cards/CampaignCard";
 
 import CompletedTasksCard from "./_cards/CompletedOrdersCard";
-import MembersCard from "./_cards/MembersCard";
+
 import MainViewCard from "./_cards/MainViewCard";
-import OngoingOrdersCard from "./_cards/OngoingOrdersCard";
+
 import CompletedOrdersCard from "./_cards/CompletedOrdersCard";
-import IncomingOrdersCard from "./_cards/IncomingOrdersCard";
+
 import { Tables } from "@/types/supabase";
 import OrganizationTitleCard from "./_cards/OrganizationTitleCard";
-import { OrganizationData } from "../types";
+import { OrganizationData, ServiceOrderWithService } from "../types";
+import OverviewCard from "./_cards/OverviewCard";
+import OrdersCard from "./_cards/OrdersCard";
+import ServicesCard from "./_cards/ServicesCard";
 
-export const states = ["Overview", "Incoming", "Ongoing", "Campaign"];
+export const states = ["Overview", "Orders", "Services"];
 
 function Dashboard({
   organizationData,
 }: {
   organizationData: OrganizationData;
 }) {
+  const [organizationDataState, setOrganizationDataState] =
+    React.useState<OrganizationData>(organizationData);
+  const [orderData, setOrderData] = React.useState<ServiceOrderWithService[]>(
+    organizationData.service_orders
+  );
   const [displayState, setDisplayState] = React.useState(states[0]);
   return (
     <div>
       <div className="grid grid-cols-1 xl:grid-cols-12 xl:space-x-3">
         <div className="xl:col-span-4 space-y-3">
-          <OrganizationTitleCard
-            setState={setDisplayState}
-            state={displayState}
-          />
+          <OrganizationTitleCard />
           <TotalFundsRaisedCard
-            orders={organizationData.service_orders}
+            orders={orderData}
             state={displayState}
             setState={setDisplayState}
           />
         </div>
         <div className="xl:col-span-8 space-y-3">
           <div className="flex-row xl:flex xl:space-x-3 ">
-            <IncomingOrdersCard
-              state={displayState}
+            <OverviewCard
               setState={setDisplayState}
-            />
-            <OngoingOrdersCard
               state={displayState}
-              setState={setDisplayState}
+              orders={orderData}
             />
-            <CampaignCard state={displayState} setState={setDisplayState} />
+            <OrdersCard
+              setState={setDisplayState}
+              state={displayState}
+              orders={orderData}
+            />
+            <ServicesCard state={displayState} setState={setDisplayState} />
           </div>
           <MainViewCard
+            organizationData={organizationDataState}
+            setOrganizationData={setOrganizationDataState}
             state={displayState}
             setState={setDisplayState}
-            orderData={organizationData.service_orders}
+            orderData={orderData}
+            setOrderData={setOrderData}
           />
         </div>
       </div>
