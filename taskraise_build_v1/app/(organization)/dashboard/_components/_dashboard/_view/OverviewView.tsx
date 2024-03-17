@@ -1,15 +1,22 @@
 import React, { useState } from "react";
-import { OrganizationData, ServiceOrderWithService } from "../../types";
+import {
+  OrganizationData,
+  ProfileWithMember,
+  ServiceOrderWithService,
+} from "../../types";
 import { CardContent, CardHeader } from "@/components/ui/card";
 import NavigationBar from "./_overviewView/NavigationBar";
 import Overview from "./_overviewView/_subviews/Overview";
 import Organization from "./_overviewView/_subviews/Organization";
 import Billing from "./_overviewView/_subviews/Billing";
+import { Tables } from "@/types/supabase";
 
 function OverviewView({
+  profileData,
   organizationData,
   setOrganizationData,
 }: {
+  profileData: ProfileWithMember;
   organizationData: OrganizationData;
   setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
 }) {
@@ -28,6 +35,7 @@ function OverviewView({
       case subviews[1]:
         return (
           <Organization
+            profileData={profileData}
             organizationData={organizationData}
             setOrganizationData={setOrganizationData}
           />

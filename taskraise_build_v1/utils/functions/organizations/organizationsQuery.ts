@@ -13,7 +13,8 @@ export async function getOrganizationAll(id: number) {
   service_orders (*, services(*), profiles(*)),
   campaigns (*),
   activities (*, profiles(*)),
-  organization_members (*, profiles(*))
+  organization_members (*, profiles(*)),
+  services (*)
 `
     )
     .eq("id", id)

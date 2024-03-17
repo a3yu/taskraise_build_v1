@@ -5,10 +5,25 @@ import {
   RadialBar,
   ResponsiveContainer,
 } from "recharts";
+import { Tables } from "@/types/supabase"; // Assuming you have a type definition
 
-const data = [{ name: "L1", value: 25 }];
+export default function CampaignCircularProgressBar({
+  campaign,
+}: {
+  campaign: Tables<"campaigns"> | null;
+}) {
+  const raised = campaign?.raised ?? 0;
+  const goal = campaign?.goal ?? 0;
+  const title = campaign?.title ?? "Start a fundraising campaign!";
 
-export default function CampaignCircularProgressBar() {
+  // Calculate percentage, ensuring it's capped at 100
+  let percentage = campaign && goal > 0 ? (raised / goal) * 100 : 0;
+  percentage = Math.min(percentage, 100); // Cap at 100%
+  const data = [{ name: "L1", value: percentage }];
+
+  // Change color to green when percentage reaches 100
+  const barColor = percentage >= 100 ? "#28a745" : "#645CFF";
+
   return (
     <>
       <ResponsiveContainer width="100%" height={180}>
@@ -33,7 +48,7 @@ export default function CampaignCircularProgressBar() {
             background
             dataKey="value"
             cornerRadius="50%"
-            fill="#645CFF"
+            fill={barColor}
           />
           <text
             x="50%"
@@ -42,13 +57,15 @@ export default function CampaignCircularProgressBar() {
             dominantBaseline="middle"
             className="font-semibold text-xl"
           >
-            {data[0].value}%
+            {percentage.toFixed(0)}%
           </text>
         </RadialBarChart>
       </ResponsiveContainer>
       <div className="text-center space-y-2">
-        <h2 className="font-semibold">FRC Worlds</h2>
-        <p className="text-sm text-muted-foreground">$200 out of $800</p>
+        <h2 className="font-semibold">{title}</h2>
+        <p className="text-sm text-muted-foreground">
+          ${raised.toLocaleString()} out of ${goal.toLocaleString()}
+        </p>
       </div>
     </>
   );

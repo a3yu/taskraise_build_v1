@@ -13,6 +13,7 @@ import React, { Suspense } from "react";
 import { OrderActivity } from "./_components/OrderActivity";
 import CampaignCircularProgressBar from "./_components/CampaignCircularProgressBar";
 import { OrganizationData } from "../../../../types";
+import EditCampaign from "./_components/EditCampaign";
 
 function Overview({
   organizationData,
@@ -29,13 +30,20 @@ function Overview({
             <CardHeader>
               <div className="flex ">
                 <h2 className="font-semibold">Campaign</h2>
-                <Button size={"icon"} variant={"outline"} className="ml-auto ">
-                  <PenLine className="h-4 w-4" />
-                </Button>
+                <div className="ml-auto">
+                  <EditCampaign
+                    organizationData={organizationData}
+                    setOrganizationData={setOrganizationData}
+                  />
+                </div>
               </div>
             </CardHeader>
             <CardContent>
-              <CampaignCircularProgressBar />
+              <CampaignCircularProgressBar
+                campaign={
+                  organizationData.campaigns ? organizationData.campaigns : null
+                }
+              />
             </CardContent>
           </Card>
           <Card className="w-2/3">

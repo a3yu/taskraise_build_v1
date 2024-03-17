@@ -2,8 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { Database } from "@/types/supabase";
-import { cookies } from "next/headers";
+
 
 export async function acceptOrder(id: number) {
   const supabase = createClient();

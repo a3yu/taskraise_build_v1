@@ -7,13 +7,15 @@ import {
 } from "@/utils/functions/profiles/profilesQuery";
 
 async function DashboardPage() {
-  const profile = await getProfileOrganization();
+  const profileOrganization = await getProfileOrganization();
   const organizationData = await getOrganizationAll(
-    profile.organization_members[0].id
+    profileOrganization.organization_members[0].id
   );
+
+  const profile = await getProfile();
   return (
     <div>
-      <Dashboard organizationData={organizationData} />
+      <Dashboard profileData={profile} organizationData={organizationData} />
     </div>
   );
 }

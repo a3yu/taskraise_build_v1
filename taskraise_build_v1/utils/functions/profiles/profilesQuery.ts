@@ -9,8 +9,9 @@ export async function getProfile() {
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("*")
+    .select("*, organization_members(*)")
     .eq("id", user.data.user.id)
+    .limit(1)
     .single();
 
   if (error) throw error;

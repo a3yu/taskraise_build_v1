@@ -38,109 +38,28 @@ import {
   ProfileWithMember,
 } from "@/app/(organization)/dashboard/_components/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import InviteUsers from "./InviteUsers";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
+import CreateService from "./_components/CreateService";
 
 const columns = (
-  profile: ProfileWithMember
-): ColumnDef<MembersWithProfile>[] => [
+  organizationData: OrganizationData
+): ColumnDef<Tables<"services">>[] => [
   {
-    id: "fullname",
+    id: "title",
 
-    header: "Full Name",
+    header: "Title",
 
     cell: ({ row }) => (
       <div className="flex items-center space-x-4">
-        <Avatar className="h-9 w-9">
-          <AvatarImage />
-          <AvatarFallback>AY</AvatarFallback>
-        </Avatar>
-        <h2>Aedin Yu</h2>
-      </div>
-    ),
-  },
-
-  {
-    id: "email",
-
-    header: "Email",
-
-    cell: ({ row }) => (
-      <div>
-        <h2>{row.original.profiles?.email}</h2>
-      </div>
-    ),
-  },
-  {
-    id: "role",
-    accessorKey: "org_role",
-
-    header: "Role",
-
-    cell: ({ row }) => (
-      <div>
-        <h2>{row.original.org_role}</h2>
-      </div>
-    ),
-  },
-  {
-    id: "actions",
-    header: "",
-    size: 1,
-    cell: ({ row }) => (
-      <div className="">
-        {row.original.profile != profile.id ? (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button size={"icon"} variant={"ghost"}>
-                <DotsHorizontalIcon className="mx-2" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {profile.organization_members[0].org_role === "ADMIN" && (
-                <>
-                  <DropdownMenuItem>Edit User</DropdownMenuItem>
-                  <DropdownMenuItem>Remove User</DropdownMenuItem>
-                </>
-              )}
-              {profile.organization_members[0].org_role === "MEMBER" && (
-                <DropdownMenuItem>View Profile</DropdownMenuItem>
-              )}
-              {profile.organization_members[0].org_role === "OWNER" && (
-                <>
-                  {row.original.org_role != "ADMIN" && (
-                    <DropdownMenuItem>Promote User</DropdownMenuItem>
-                  )}
-                  {row.original.org_role == "ADMIN" && (
-                    <DropdownMenuItem>Demote User</DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem>Remove User</DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ) : (
-          <>
-            <Button size={"icon"} variant={"ghost"} disabled>
-              <DotsHorizontalIcon className="mx-2" />
-            </Button>
-          </>
-        )}
+        <h2>{row.original.title}</h2>
       </div>
     ),
   },
 ];
-export default function MembersTable({
-  profileData,
+export default function Services({
   organizationData,
   setOrganizationData,
 }: {
-  profileData: ProfileWithMember;
   organizationData: OrganizationData;
   setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
 }) {
@@ -151,9 +70,13 @@ export default function MembersTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const tableColumns = React.useMemo(() => columns(profileData), [profileData]);
+  const tableColumns = React.useMemo(
+    () => columns(organizationData),
+    [organizationData]
+  );
+
   const table = useReactTable({
-    data: organizationData.organization_members,
+    data: organizationData.services,
     columns: tableColumns,
 
     onSortingChange: setSorting,
@@ -189,7 +112,10 @@ export default function MembersTable({
           }
           className="max-w-sm"
         />
-        <InviteUsers organizationData={organizationData} />
+        <CreateService
+          organizationData={organizationData}
+          setOrganizationData={setOrganizationData}
+        />
       </div>
       <div className="rounded-md border">
         <Table>

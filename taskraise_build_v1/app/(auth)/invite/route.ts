@@ -11,18 +11,28 @@ export async function GET(request: NextRequest) {
   const redirectTo = request.nextUrl.clone();
   redirectTo.pathname = next;
   redirectTo.searchParams.delete("token_hash");
-  redirectTo.searchParams.delete("type");
 
   if (token_hash) {
     const supabase = createClient();
-
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash,
-    });
-    if (!error) {
-      redirectTo.searchParams.delete("next");
-      return NextResponse.redirect(redirectTo);
+    const { data: invitation, error } = await supabase
+      .from("invitations")
+      .select("*")
+      .eq("token", token_hash)
+      .single();
+    if (invitation) {
+      if (new Date(invitation.expires_at) > new Date()) {
+        const { error } = await supabase
+          .from("invitations")
+          .update({ accepted: true })
+          .eq("id", invitation.id);
+        console.log(error);
+        if (error) {
+          redirectTo.pathname = "/error";
+          return NextResponse.redirect(redirectTo);
+        }
+        redirectTo.pathname = "/dashboard";
+        return NextResponse.redirect(redirectTo);
+      }
     }
   }
 

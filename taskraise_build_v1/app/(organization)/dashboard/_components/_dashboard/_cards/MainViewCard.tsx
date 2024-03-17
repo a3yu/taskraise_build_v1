@@ -4,9 +4,14 @@ import MainView from "../_view/MainView";
 import { states } from "../Dashboard";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
 import { Tables } from "@/types/supabase";
-import { OrganizationData, ServiceOrderWithService } from "../../types";
+import {
+  OrganizationData,
+  ProfileWithMember,
+  ServiceOrderWithService,
+} from "../../types";
 
 export default function MainViewCard({
+  profileData,
   organizationData,
   setOrganizationData,
   state,
@@ -14,6 +19,7 @@ export default function MainViewCard({
   orderData,
   setOrderData,
 }: {
+  profileData: ProfileWithMember;
   organizationData: OrganizationData;
   setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
   state: string;
@@ -42,6 +48,7 @@ export default function MainViewCard({
     <>
       <Card>
         <MainView
+          profileData={profileData}
           organizationData={organizationData}
           setOrganizationData={setOrganizationData}
           state={state}

@@ -67,7 +67,6 @@ export type Database = {
           description: string
           goal: number
           id: number
-          organization: number
           raised: number
           title: string
         }
@@ -76,7 +75,6 @@ export type Database = {
           description?: string
           goal: number
           id?: number
-          organization: number
           raised: number
           title?: string
         }
@@ -85,15 +83,14 @@ export type Database = {
           description?: string
           goal?: number
           id?: number
-          organization?: number
           raised?: number
           title?: string
         }
         Relationships: [
           {
-            foreignKeyName: "public_campaigns_organization_fkey"
-            columns: ["organization"]
-            isOneToOne: false
+            foreignKeyName: "public_campaigns_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "organizations"
             referencedColumns: ["id"]
           }
@@ -101,31 +98,34 @@ export type Database = {
       }
       invitations: {
         Row: {
-          accepted: boolean | null
+          accepted: boolean
           created_at: string
-          email: string | null
-          expires_at: string | null
+          email: string
+          expires_at: string
           id: number
-          organization: number | null
-          token: string | null
+          organization: number
+          profile: string
+          token: string
         }
         Insert: {
-          accepted?: boolean | null
+          accepted?: boolean
           created_at?: string
-          email?: string | null
-          expires_at?: string | null
+          email: string
+          expires_at: string
           id?: number
-          organization?: number | null
-          token?: string | null
+          organization: number
+          profile: string
+          token: string
         }
         Update: {
-          accepted?: boolean | null
+          accepted?: boolean
           created_at?: string
-          email?: string | null
-          expires_at?: string | null
+          email?: string
+          expires_at?: string
           id?: number
-          organization?: number | null
-          token?: string | null
+          organization?: number
+          profile?: string
+          token?: string
         }
         Relationships: [
           {
@@ -133,6 +133,13 @@ export type Database = {
             columns: ["organization"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_invitations_profile_fkey"
+            columns: ["profile"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
         ]
@@ -327,19 +334,30 @@ export type Database = {
         Row: {
           created_at: string
           id: number
+          organization: number
           title: string
         }
         Insert: {
           created_at?: string
           id?: number
+          organization: number
           title?: string
         }
         Update: {
           created_at?: string
           id?: number
+          organization?: number
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_services_organization_fkey"
+            columns: ["organization"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          }
+        ]
       }
       transactions: {
         Row: {

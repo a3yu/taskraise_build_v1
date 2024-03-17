@@ -11,7 +11,11 @@ import CompletedOrdersCard from "./_cards/CompletedOrdersCard";
 
 import { Tables } from "@/types/supabase";
 import OrganizationTitleCard from "./_cards/OrganizationTitleCard";
-import { OrganizationData, ServiceOrderWithService } from "../types";
+import {
+  OrganizationData,
+  ProfileWithMember,
+  ServiceOrderWithService,
+} from "../types";
 import OverviewCard from "./_cards/OverviewCard";
 import OrdersCard from "./_cards/OrdersCard";
 import ServicesCard from "./_cards/ServicesCard";
@@ -19,8 +23,10 @@ import ServicesCard from "./_cards/ServicesCard";
 export const states = ["Overview", "Orders", "Services"];
 
 function Dashboard({
+  profileData,
   organizationData,
 }: {
+  profileData: ProfileWithMember;
   organizationData: OrganizationData;
 }) {
   const [organizationDataState, setOrganizationDataState] =
@@ -55,6 +61,7 @@ function Dashboard({
             <ServicesCard state={displayState} setState={setDisplayState} />
           </div>
           <MainViewCard
+            profileData={profileData}
             organizationData={organizationDataState}
             setOrganizationData={setOrganizationDataState}
             state={displayState}
