@@ -58,7 +58,11 @@ function Dashboard({
               state={displayState}
               orders={orderData}
             />
-            <ServicesCard state={displayState} setState={setDisplayState} />
+            <ServicesCard
+              state={displayState}
+              setState={setDisplayState}
+              services={organizationData.services}
+            />
           </div>
           <MainViewCard
             profileData={profileData}

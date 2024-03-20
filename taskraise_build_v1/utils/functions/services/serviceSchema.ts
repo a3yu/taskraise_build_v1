@@ -9,4 +9,26 @@ export const serviceSchema = z.object({
     .string()
     .min(50, { message: "Description be more than 50 characters long" })
     .max(500, { message: "Description must be at most 500 characters long" }),
+  location_geo: z.string(),
+  location: z.string(),
+  price: z.coerce
+    .number()
+    .multipleOf(0.01, {
+      message: "Please use a valid currency format: two decimal points.",
+    })
+    .min(2, {
+      message: "Service must have a price over $2",
+    }),
+  order_details: z.string().min(1, {
+    message: "Required.",
+  }),
+  service_details: z.string().min(1, {
+    message: "Required.",
+  }),
+  thumbnail_path: z.string().min(1, {
+    message: "Service must have a thumbnail.",
+  }),
+  service_type: z.string().min(1, {
+    message: "Please select a type.",
+  }),
 });

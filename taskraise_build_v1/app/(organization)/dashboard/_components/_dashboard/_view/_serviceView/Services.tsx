@@ -31,27 +31,92 @@ import {
 } from "@/components/ui/table";
 
 import { Tables } from "@/types/supabase";
-import { CardContent, CardHeader } from "@/components/ui/card";
-import {
-  MembersWithProfile,
-  OrganizationData,
-  ProfileWithMember,
-} from "@/app/(organization)/dashboard/_components/types";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-import CreateService from "./_components/CreateService";
+import { OrganizationData } from "@/app/(organization)/dashboard/_components/types";
+import { createClient } from "@/utils/supabase/client";
+import Image from "next/image";
+import { CreateService } from "./_components/CreateService";
+import { Cog } from "lucide-react";
+import ServiceDropdown from "./_components/ServiceDropdown";
+import { getActive } from "@/utils/functions/helper";
 
 const columns = (
   organizationData: OrganizationData
 ): ColumnDef<Tables<"services">>[] => [
   {
-    id: "title",
+    size: 1,
+    accessorKey: "thumbnail_path",
+    header: () => <div className=""></div>,
+    cell: function Cell({ row }) {
+      const supabase = createClient();
+      const [thumbnail, setThumbnail] = React.useState("");
+      React.useEffect(() => {
+        async function downloadImage(path: string) {
+          try {
+            const { data, error } = await supabase.storage
+              .from("public/service_thumbnails")
+              .download(path);
+            if (error) {
+              throw error;
+            }
 
+            const url = URL.createObjectURL(data);
+            setThumbnail(url);
+          } catch (error) {
+            console.log("Error downloading image: ", error);
+          }
+        }
+        downloadImage(row.getValue("thumbnail_path"));
+        console.log(row.getValue("thumbnail_path"));
+      }, [supabase]);
+
+      return (
+        <div className="w-[100px] h-[56.25px] relative">
+          {" "}
+          <Image
+            src={thumbnail}
+            layout="fill"
+            alt="thumbnail"
+            className="rounded"
+          />
+        </div>
+      );
+    },
+  },
+  {
+    id: "title",
+    accessorKey: "title",
     header: "Title",
 
     cell: ({ row }) => (
       <div className="flex items-center space-x-4">
         <h2>{row.original.title}</h2>
+      </div>
+    ),
+  },
+  {
+    id: "location",
+
+    header: "Location",
+
+    cell: ({ row }) => (
+      <div className="flex items-center space-x-4">
+        <h2>{row.original.location ? row.original.location : "REMOTE"}</h2>
+      </div>
+    ),
+  },
+  {
+    id: "location",
+
+    header: "",
+    size: 1,
+
+    cell: ({ row }) => (
+      <div className="flex items-center">
+        <ServiceDropdown service={row.original}>
+          <Button size={"icon"} variant={"ghost"}>
+            <Cog className="h-5 w-5 text-gray-800" />
+          </Button>
+        </ServiceDropdown>
       </div>
     ),
   },
@@ -76,7 +141,7 @@ export default function Services({
   );
 
   const table = useReactTable({
-    data: organizationData.services,
+    data: getActive(organizationData.services),
     columns: tableColumns,
 
     onSortingChange: setSorting,
@@ -103,19 +168,19 @@ export default function Services({
     <>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Search usernames..."
-          value={
-            (table.getColumn("username")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Search services..."
+          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("username")?.setFilterValue(event.target.value)
+            table.getColumn("title")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <CreateService
-          organizationData={organizationData}
-          setOrganizationData={setOrganizationData}
-        />
+        <div className="ml-auto">
+          <CreateService
+            organizationData={organizationData}
+            setOrganizationData={setOrganizationData}
+          />
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

@@ -10,13 +10,16 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { states } from "../Dashboard";
+import { Tables } from "@/types/supabase";
 
 export default function ServicesCard({
   state,
   setState,
+  services,
 }: {
   state: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
+  services: Tables<"services">[];
 }) {
   return (
     <>
@@ -31,7 +34,7 @@ export default function ServicesCard({
             <h2 className="text-sm text-muted-foreground font-semibold">
               Services
             </h2>
-            <h2 className="text-3xl font-semibold">11</h2>
+            <h2 className="text-3xl font-semibold">{services.length}</h2>
           </div>
         </CardHeader>
       </Card>
