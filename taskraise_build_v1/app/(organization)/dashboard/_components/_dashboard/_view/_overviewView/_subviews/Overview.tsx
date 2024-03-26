@@ -22,6 +22,9 @@ function Overview({
   organizationData: OrganizationData;
   setOrganizationData: React.Dispatch<React.SetStateAction<OrganizationData>>;
 }) {
+  const activities = organizationData.activities.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
   return (
     <div>
       <div className="space-y-4">
@@ -51,7 +54,7 @@ function Overview({
               <CardTitle>Recent Activity</CardTitle>
             </CardHeader>
             <CardContent className="h-full">
-              <OrderActivity activities={organizationData.activities} />
+              <OrderActivity activities={activities} />
             </CardContent>
           </Card>
         </div>

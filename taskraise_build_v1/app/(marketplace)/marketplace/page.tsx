@@ -9,6 +9,7 @@ import {
   searchServicesNearby,
   searchServicesRemote,
 } from "@/utils/functions/services/serviceQuery";
+import { getProfile } from "@/utils/functions/profiles/profilesQuery";
 
 export default async function MarketplacePage({
   params,
@@ -17,8 +18,8 @@ export default async function MarketplacePage({
   params: { slug: string };
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const supabase = createClient();
-  const user = await supabase.auth.getUser();
+  const profile = await getProfile();
+
   if (!("search" in searchParams)) {
     redirect("/");
   } else {
@@ -33,7 +34,7 @@ export default async function MarketplacePage({
 
         return (
           <Marketplace
-            user={user.data.user}
+            profile={profile}
             searchParams={searchParams}
             filterParamsLocation={searchParams.localName as string}
             filterParamsRadius={searchParams.radius as string}
@@ -46,7 +47,7 @@ export default async function MarketplacePage({
         );
         return (
           <Marketplace
-            user={user.data.user}
+            profile={profile}
             searchParams={searchParams}
             filterParamsLocation={searchParams.localName as string}
             filterParamsRadius={searchParams.radius as string}
@@ -59,7 +60,7 @@ export default async function MarketplacePage({
     const tickets = await searchServices(searchParams.search as string);
     return (
       <Marketplace
-        user={user.data.user}
+        profile={profile}
         searchParams={searchParams}
         filterParamsLocation={null}
         filterParamsRadius={null}

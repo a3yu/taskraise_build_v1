@@ -27,7 +27,9 @@ function MainView({
   setOrderData: React.Dispatch<React.SetStateAction<ServiceOrderWithService[]>>;
 }) {
   let Component = null;
-
+  orderData.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
   switch (state) {
     case states[0]:
       Component = (

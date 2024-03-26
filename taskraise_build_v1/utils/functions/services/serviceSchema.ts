@@ -7,7 +7,7 @@ export const serviceSchema = z.object({
     .max(50, { message: "Title must be at most 50 characters long" }),
   description: z
     .string()
-    .min(50, { message: "Description be more than 50 characters long" })
+    .min(20, { message: "Description be more than 20 characters long" })
     .max(500, { message: "Description must be at most 500 characters long" }),
   location_geo: z.string(),
   location: z.string(),

@@ -19,6 +19,7 @@ import {
 import OverviewCard from "./_cards/OverviewCard";
 import OrdersCard from "./_cards/OrdersCard";
 import ServicesCard from "./_cards/ServicesCard";
+import EditOrganization from "./_components/EditOrganization";
 
 export const states = ["Overview", "Orders", "Services"];
 
@@ -39,7 +40,11 @@ function Dashboard({
     <div>
       <div className="grid grid-cols-1 xl:grid-cols-12 xl:space-x-3">
         <div className="xl:col-span-4 space-y-3">
-          <OrganizationTitleCard />
+          <OrganizationTitleCard
+            organization={organizationDataState}
+            setOrganization={setOrganizationDataState}
+            profile={profileData}
+          />
           <TotalFundsRaisedCard
             orders={orderData}
             state={displayState}

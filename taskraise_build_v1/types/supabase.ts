@@ -15,7 +15,7 @@ export type Database = {
           created_at: string
           customer: string
           id: number
-          orderId: number
+          order_id: number
           organization: number
           total: number
         }
@@ -24,7 +24,7 @@ export type Database = {
           created_at?: string
           customer: string
           id?: number
-          orderId: number
+          order_id: number
           organization: number
           total: number
         }
@@ -33,7 +33,7 @@ export type Database = {
           created_at?: string
           customer?: string
           id?: number
-          orderId?: number
+          order_id?: number
           organization?: number
           total?: number
         }
@@ -47,7 +47,7 @@ export type Database = {
           },
           {
             foreignKeyName: "public_activities_orderId_fkey"
-            columns: ["orderId"]
+            columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "service_orders"
             referencedColumns: ["id"]
@@ -147,17 +147,54 @@ export type Database = {
       messages: {
         Row: {
           created_at: string
+          customer: string
           id: number
+          message: string
+          order: number
+          organization: number
+          to_customer: boolean | null
         }
         Insert: {
           created_at?: string
+          customer: string
           id?: number
+          message: string
+          order: number
+          organization: number
+          to_customer?: boolean | null
         }
         Update: {
           created_at?: string
+          customer?: string
           id?: number
+          message?: string
+          order?: number
+          organization?: number
+          to_customer?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "public_messages_customer_fkey"
+            columns: ["customer"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_messages_order_fkey"
+            columns: ["order"]
+            isOneToOne: false
+            referencedRelation: "service_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "public_messages_organization_fkey"
+            columns: ["organization"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       organization_members: {
         Row: {
@@ -197,25 +234,37 @@ export type Database = {
       }
       organizations: {
         Row: {
+          connected_account: string
           created_at: string
+          description: string
+          email: string
           id: number
           location: string
           name: string
-          pfp_path: string
+          orders: number
+          pfp_path: string | null
         }
         Insert: {
+          connected_account?: string
           created_at?: string
+          description?: string
+          email?: string
           id?: number
           location?: string
           name?: string
-          pfp_path?: string
+          orders?: number
+          pfp_path?: string | null
         }
         Update: {
+          connected_account?: string
           created_at?: string
+          description?: string
+          email?: string
           id?: number
           location?: string
           name?: string
-          pfp_path?: string
+          orders?: number
+          pfp_path?: string | null
         }
         Relationships: []
       }
@@ -224,19 +273,19 @@ export type Database = {
           created_at: string
           email: string
           id: string
-          username: string
+          username: string | null
         }
         Insert: {
           created_at?: string
           email: string
           id: string
-          username: string
+          username?: string | null
         }
         Update: {
           created_at?: string
           email?: string
           id?: string
-          username?: string
+          username?: string | null
         }
         Relationships: [
           {
@@ -269,8 +318,11 @@ export type Database = {
           created_at: string
           customer: string
           details: string | null
+          fee: number
+          hours: number
           id: number
           organization: number
+          payment_intent: string
           price: number
           quantity: number | null
           service: number
@@ -281,8 +333,11 @@ export type Database = {
           created_at?: string
           customer: string
           details?: string | null
+          fee?: number
+          hours: number
           id?: number
           organization: number
+          payment_intent?: string
           price: number
           quantity?: number | null
           service: number
@@ -293,8 +348,11 @@ export type Database = {
           created_at?: string
           customer?: string
           details?: string | null
+          fee?: number
+          hours?: number
           id?: number
           organization?: number
+          payment_intent?: string
           price?: number
           quantity?: number | null
           service?: number
@@ -423,6 +481,19 @@ export type Database = {
           org_id: string
           new_member_profile: string
           new_member_role: string
+        }
+        Returns: undefined
+      }
+      increase_raised_amount: {
+        Args: {
+          campaign_id: number
+          amount_to_add: number
+        }
+        Returns: undefined
+      }
+      increment_order_count: {
+        Args: {
+          service_id: number
         }
         Returns: undefined
       }

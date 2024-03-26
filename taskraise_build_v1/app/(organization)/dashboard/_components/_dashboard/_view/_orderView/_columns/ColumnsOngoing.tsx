@@ -4,6 +4,7 @@ import { ServiceOrderWithService } from "../../../../types";
 import IncomingActionsDialog from "./IncomingActionDialog";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export const columns: ColumnDef<ServiceOrderWithService>[] = [
   {
@@ -66,8 +67,14 @@ export const columns: ColumnDef<ServiceOrderWithService>[] = [
     header: () => <div className="mx-1">Details</div>,
     size: 1,
     cell: ({ row }) => {
+      const router = useRouter();
       return (
-        <h2 className="text-blue-700 underline hover:cursor-pointer mx-1 ">
+        <h2
+          className="text-blue-700 underline hover:cursor-pointer mx-1"
+          onClick={() => {
+            router.push("/dashboard/orders/" + row.original.id);
+          }}
+        >
           Details
         </h2>
       );

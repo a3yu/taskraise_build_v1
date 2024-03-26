@@ -11,24 +11,19 @@ import {
 } from "@stripe/react-stripe-js";
 
 import * as config from "@/config";
-import getStripe from "@/utils/functions/stripe/get-stripe";
-import { createPaymentIntent } from "@/utils/functions/stripe/stripe";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import ServiceOrder from "../marketplace/page/ServiceOrder";
+import getStripe from "@/lib/getStripe";
+
+import ServiceOrder from "./ServiceOrder";
 import { Tables } from "@/types/supabase";
 import { User } from "@supabase/supabase-js";
+import { ServiceSearch } from "@/app/(marketplace)/marketplace/types";
 
 export default function ElementsForm({
+  profile,
   service,
-  primaryCampaign,
-  organization,
-  user,
 }: {
-  service: Tables<"services">;
-  primaryCampaign: Tables<"campaigns"> | null;
-  organization: Tables<"organizations">;
-  user: User;
+  service: ServiceSearch;
+  profile: Tables<"profiles">;
 }): JSX.Element {
   return (
     <Elements
@@ -47,12 +42,7 @@ export default function ElementsForm({
         amount: Math.round(config.MAX_AMOUNT / config.AMOUNT_STEP),
       }}
     >
-      <ServiceOrder
-        user={user}
-        organization={organization}
-        primaryCampaign={primaryCampaign}
-        service={service}
-      />
+      <ServiceOrder profile={profile} service={service} />
     </Elements>
   );
 }

@@ -5,6 +5,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Script from "next/script";
+import { createClient } from "@/utils/supabase/server";
 
 export const metadata: Metadata = {
   title: "TaskRaise",

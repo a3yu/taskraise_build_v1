@@ -3,6 +3,8 @@ import { createClient } from "@/utils/supabase/server";
 import { v4 as uuidv4 } from "uuid";
 import { add } from "date-fns";
 import { Resend } from "resend";
+import { createStripeAccount } from "../stripe/stripe";
+import { getProfile } from "../profiles/profilesQuery";
 
 export async function inviteUser(email: string, organization: number) {
   const supabase = createClient();
@@ -39,4 +41,40 @@ export async function inviteUser(email: string, organization: number) {
              <a href="http://localhost:3000/invite?token_hash=${token}">Accept Invitation</a>
              <p>This invitation will expire on ${expirationDate.toLocaleDateString()}.</p>`,
   });
+}
+
+export async function createOrganization(
+  name: string,
+  description: string,
+  location: string,
+  location_geo: string,
+  id: string
+) {
+  const supabase = createClient();
+  const stripeAcc = await createStripeAccount();
+  const { data, error } = await supabase
+    .from("organizations")
+    .insert({
+      name,
+      description,
+      location,
+      location_geo,
+      stripe_account: stripeAcc.id,
+    })
+    .select("*")
+    .single();
+}
+
+export async function acceptInvite(id: string, organization: number) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("invitations")
+    .update({ accepted: true })
+    .eq("profile", id)
+    .eq("organization", organization).select(`*,
+    organizations(*)`);
+
+  if (error) throw error;
+
+  return await getProfile();
 }

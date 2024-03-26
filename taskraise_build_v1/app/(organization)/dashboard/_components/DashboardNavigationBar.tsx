@@ -3,44 +3,86 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-
-const pages = [
-  { name: "Dashboard", path: "/dashboard" },
-  { name: "Services", path: "/dashboard/services" },
-  { name: "Organization", path: "/dashboard/organization" },
-];
+import Logo from "@/public/black.svg";
+import Image from "next/image";
+import { CircleUser } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User } from "@supabase/supabase-js";
+import { Tables } from "@/types/supabase";
+import { createClient } from "@/utils/supabase/client";
 
 function DashboardNavigationBar({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
-  const pathname = usePathname();
+  profile,
+  organization,
+}: {
+  profile: Tables<"profiles">;
+  organization: Tables<"organization_members">[];
+}) {
+  const supabase = createClient();
+  const router = useRouter();
   return (
     <div>
-      <nav
-        className={cn("flex items-center px-40 border-b-2", className)}
-        {...props}
-      >
-        {pages.map((value) => {
-          return (
-            <div
-              key={value.name}
-              className={`transition duration-300 ease-in-out hover:cursor-pointer ${
-                pathname == value.path
-                  ? "border-b-[3px] border-primary py-3 px-5 bg-purple-50"
-                  : "hover:bg-purple-50 py-3 px-5"
-              }`}
-            >
-              <Link
-                key={value.path}
-                href={value.path}
-                className="font-semibold"
+      <nav className="flex items-center px-20 border-b-2 -mb-6">
+        <div className="flex">
+          <Image
+            src={Logo}
+            alt="Logo"
+            height={70}
+            className="hover:cursor-pointer"
+            onClick={() => {
+              router.push("/");
+            }}
+          />
+          <h1
+            className="font-bold text-xl my-auto -ml-2 hover:cursor-pointer text-black"
+            onClick={() => {
+              router.push("/");
+            }}
+          >
+            TaskRaise
+          </h1>
+        </div>
+        <div className="ml-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <CircleUser className="h-7 w-7 hover:cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {organization.length == 1 && (
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push("/dashboard");
+                  }}
+                >
+                  Dashboard
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push("/marketplace");
+                }}
               >
-                {value.name}
-              </Link>
-            </div>
-          );
-        })}
+                Marketplace
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="text-red-500"
+                onClick={() => {
+                  supabase.auth.signOut().then(() => {
+                    router.push("/");
+                  });
+                }}
+              >
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </nav>
     </div>
   );

@@ -2,9 +2,24 @@
 import { ServiceSearch } from "@/app/(marketplace)/marketplace/types";
 import { createClient } from "@/utils/supabase/server";
 
-const supabase = createClient();
+export async function getService(id: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("services")
+    .select(`*, organizations (*, campaigns(*))`)
+    .eq("id", id)
+    .returns<ServiceSearch[]>();
+
+  if (error) {
+    console.error("Error fetching services:", error);
+    return [];
+  }
+
+  return data;
+}
 
 export async function searchServices(productTitle: string) {
+  const supabase = createClient();
   const { data: tickets, error } = await supabase
     .rpc("search_services", {
       product_title: productTitle,
@@ -25,7 +40,7 @@ export async function searchServices(productTitle: string) {
     console.error("Error fetching services:", error);
     return [];
   }
-  console.log(tickets[0].organizations.campaigns);
+
   return tickets;
 }
 
@@ -36,12 +51,13 @@ export async function searchServicesNearby(
   latitude: string,
   longitude: string
 ) {
+  const supabase = createClient();
   const { data: tickets, error } = await supabase
     .rpc("search_nearby_services", {
       product_title: productTitle,
       dist_meters: parseFloat(radius) * 1600,
-      lat: parseFloat(latitude),
-      long: parseFloat(longitude),
+      lat: parseFloat(longitude),
+      long: parseFloat(latitude),
     })
     .select(
       `
@@ -64,6 +80,7 @@ export async function searchServicesNearby(
 
 // Function to search for remote services
 export async function searchServicesRemote(productTitle: string) {
+  const supabase = createClient();
   const { data: tickets, error } = await supabase
     .rpc("search_remote_services", {
       product_title: productTitle,
@@ -92,6 +109,7 @@ export async function getServicesSearchNormal(
   to: number,
   search: string
 ) {
+  const supabase = createClient();
   const { data } = await supabase
     .rpc("search_services", {
       product_title: search,
@@ -118,6 +136,7 @@ export async function getServicesSearchNearby(
   lat: string,
   long: string
 ) {
+  const supabase = createClient();
   const { data } = await supabase
     .rpc("search_nearby_services", {
       product_title: search,
@@ -144,6 +163,7 @@ export async function getServicesSearchRemote(
   to: number,
   search: string
 ) {
+  const supabase = createClient();
   const { data } = await supabase
     .rpc("search_remote_services", {
       product_title: search,

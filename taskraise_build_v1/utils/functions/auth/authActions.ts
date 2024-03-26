@@ -47,3 +47,15 @@ export async function signup(values: z.infer<typeof signUpSchema>) {
   revalidatePath("/", "layout");
   redirect("/");
 }
+
+export async function signupGoogle() {
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+  if (error) {
+    console.log(error);
+    redirect("/error");
+  }
+  redirect(data.url);
+}

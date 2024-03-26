@@ -34,7 +34,7 @@ export default function IncomingActionsDialog({
   async function handleAcceptOrder() {
     if (acceptClickCount === 1) {
       setLoading(true);
-      await acceptOrder(order.id).then((newOrder) => {
+      await acceptOrder(order.id, order.payment_intent).then((newOrder) => {
         const updatedOrders = allOrders.map((o) =>
           o.id === newOrder.id ? newOrder : o
         );
@@ -52,7 +52,7 @@ export default function IncomingActionsDialog({
   async function handleRejectOrder() {
     if (rejectClickCount === 1) {
       setLoading(true);
-      await rejectOrder(order.id).then((newOrder) => {
+      await rejectOrder(order.id, order.payment_intent).then((newOrder) => {
         const updatedOrders = allOrders.map((o) =>
           o.id === newOrder.id ? newOrder : o
         );

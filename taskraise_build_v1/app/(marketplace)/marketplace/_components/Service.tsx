@@ -50,8 +50,8 @@ function ServiceCard({ service }: { service: ServiceSearch }) {
         setThumbnail(url);
         if (pathPfp) {
           const { data: pfpdata, error: pfperror } = await supabase.storage
-            .from("public/service_thumbnails")
-            .download(pathPfp);
+            .from("public/org_pfps")
+            .download(organization.id + "/" + pathPfp);
           if (pfperror) {
             throw error;
           }
@@ -84,12 +84,12 @@ function ServiceCard({ service }: { service: ServiceSearch }) {
   }).format(service.price);
   return (
     <Card
-      className=" m-2 hover:cursor-pointer hover:scale-105 hover:animate-in scale-100 animate-out"
+      className="m-2 w-72 hover:cursor-pointer hover:scale-105 hover:animate-in scale-100 animate-out"
       onClick={() => {
         window.open("/marketplace/service/" + service.id, "_blank");
       }}
     >
-      <div className="w-72 h-40 relative ">
+      <div className="h-40 relative ">
         {thumbnail ? (
           <Image
             src={thumbnail}

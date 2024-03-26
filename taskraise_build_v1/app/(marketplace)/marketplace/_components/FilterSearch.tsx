@@ -193,10 +193,10 @@ function FilterSearch({
           </PopoverContent>
         </Popover>
       </div>
-      <div className="pb-2 flex space-x-4">
+      <div className="pb-2 flex space-x-4 mt-4">
         {locationNameParam && (
           <Badge
-            className="bg-black hover:bg-gray-800 hover:cursor-pointer"
+            className="bg-black hover:bg-gray-800 hover:cursor-pointer rounded-xl"
             onClick={() => {
               const params = new URLSearchParams(window.location.search);
               params.delete("lat");

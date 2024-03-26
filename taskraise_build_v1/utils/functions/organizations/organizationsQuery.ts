@@ -24,3 +24,16 @@ export async function getOrganizationAll(id: number) {
 
   return data;
 }
+
+export async function getOrganizationById(id: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("organization_members")
+    .select("*")
+    .eq("profile", id);
+
+  if (error) throw error;
+
+  return data;
+}

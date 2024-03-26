@@ -17,7 +17,7 @@ import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { signup } from "@/utils/functions/auth/authActions";
+import { signup, signupGoogle } from "@/utils/functions/auth/authActions";
 import { signUpSchema } from "@/utils/functions/auth/authSchema";
 
 export default function SignUp() {
@@ -33,6 +33,9 @@ export default function SignUp() {
   });
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     await signup(data);
+  };
+  const signUpGoogleClient = async () => {
+    await signupGoogle();
   };
   return (
     <div className="w-1/2">
@@ -108,7 +111,11 @@ export default function SignUp() {
 
           <section className="w-full flex justify-center items-center">
             <div className="flex">
-              <Button variant={"outline"} type="submit">
+              <Button
+                variant={"outline"}
+                type="button"
+                onClick={signUpGoogleClient}
+              >
                 Sign up using Google
               </Button>
             </div>

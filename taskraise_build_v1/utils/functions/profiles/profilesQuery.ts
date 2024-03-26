@@ -5,11 +5,11 @@ export async function getProfile() {
   const supabase = createClient();
 
   const user = await supabase.auth.getUser();
-  if (!user.data.user) throw new Error("User not found");
+  if (!user.data.user) return null;
 
   const { data, error } = await supabase
     .from("profiles")
-    .select("*, organization_members(*)")
+    .select("*, organization_members(*), invitations(*, organizations(*))")
     .eq("id", user.data.user.id)
     .limit(1)
     .single();

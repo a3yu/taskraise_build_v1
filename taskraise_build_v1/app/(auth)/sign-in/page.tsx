@@ -51,7 +51,7 @@ export default function SignIn() {
         </div>
       </section>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(signin)} className="space-y-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <FormField
             control={form.control}
             name="email"

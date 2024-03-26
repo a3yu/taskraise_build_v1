@@ -27,7 +27,7 @@ import {
 
 import NavigationBarSearch from "./NavigationBarSearch";
 import { User } from "@supabase/supabase-js";
-import { ServiceSearch } from "../types";
+import { ProfileWithOrganization, ServiceSearch } from "../types";
 import Service from "./Service";
 
 function Marketplace({
@@ -35,7 +35,7 @@ function Marketplace({
   filterParamsLocation,
   filterParamsRadius,
   searchParams,
-  user,
+  profile,
 }: {
   initialTickets: ServiceSearch[];
   filterParamsLocation: string | null;
@@ -43,8 +43,9 @@ function Marketplace({
   searchParams: {
     [key: string]: string | string[] | undefined;
   };
-  user: User | null;
+  profile: ProfileWithOrganization | null;
 }) {
+  const [profileState, setProfileState] = useState(profile);
   const router = useRouter();
   const [tickets, setTickets] = useState<ServiceSearch[]>(initialTickets);
   const [search, setSearch] = useState<string | null>();
@@ -147,7 +148,7 @@ function Marketplace({
 
   return (
     <div ref={containerRef}>
-      <NavigationBarSearch user={user} />
+      <NavigationBarSearch profile={profileState} />
       <div className="px-10 my-1">
         <div className="flex my-auto">
           <FilterSearch

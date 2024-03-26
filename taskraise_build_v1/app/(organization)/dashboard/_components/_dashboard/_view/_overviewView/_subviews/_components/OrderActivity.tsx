@@ -40,7 +40,7 @@ export function OrderActivity({
                 Order {activity.action} ({activity.profiles?.username})
               </p>
               <p className="text-sm text-muted-foreground">
-                #{formatNumberToId(activity.orderId)}
+                #{formatNumberToId(activity.order_id)}
               </p>
             </div>
             <div className="ml-auto font-medium">
